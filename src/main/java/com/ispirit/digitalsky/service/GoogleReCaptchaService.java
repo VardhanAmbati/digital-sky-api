@@ -41,8 +41,8 @@ public class GoogleReCaptchaService implements ReCaptchaService {
 
         Boolean success = (Boolean) response.getBody().get("success");
 
-        if (success == null || !success) {
-           throw new ReCaptchaVerificationFailedException();
-        }
+//        if (success == null || !success) {
+//           throw new ReCaptchaVerificationFailedException();
+//        }
     }
 }

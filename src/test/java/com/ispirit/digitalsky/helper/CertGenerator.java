@@ -37,11 +37,11 @@ public class CertGenerator {
     // Create self signed Root CA certificate
     KeyPair rootCAKeyPair = generateKeyPair();
     X509v3CertificateBuilder builder = new JcaX509v3CertificateBuilder(
-        new X500Name("C=IN, ST=Karnataka, L=Bangalore, O=Sahajsoftwaresolutions, OU=services, CN=sahajsoftwaresolutions/emailAddress=charana@sahajsoft.com"), // issuer authority
+        new X500Name("C=IN, ST=Andhra, L=Vijayawada, O=InteamoInnovations, OU=services, CN=InteamoInnovations/emailAddress=admin@inteamo.in"), // issuer authority
         BigInteger.valueOf(new Random().nextInt()), //serial number of certificate
         Date.from(LocalDateTime.now().atZone(ZoneId.systemDefault()).toInstant()), // start of validity
         Date.from(LocalDateTime.of(2025,12,31,0,0,0).atZone(ZoneId.systemDefault()).toInstant()), //end of certificate validity
-        new X500Name("C=IN, ST=Karnataka, L=Bangalore, O=Sahajsoftwaresolutions, OU=services, CN=sahajsoftwaresolutions/emailAddress=charana@sahajsoft.com"), // subject name of certificate
+        new X500Name("C=IN, ST=Andhra, L=Vijayawada, O=InteamoInnovations, OU=services, CN=InteamoInnovations/emailAddress=admin@inteamo.in"), // subject name of certificate
         rootCAKeyPair.getPublic()); // public key of certificate
     // key usage restrictions
     builder.addExtension(Extension.keyUsage, true, new KeyUsage(KeyUsage.keyCertSign));
@@ -59,7 +59,7 @@ public class CertGenerator {
         rootCA, // here rootCA is issuer authority
         BigInteger.valueOf(new Random().nextInt()), Date.from(LocalDateTime.now().atZone(ZoneId.systemDefault()).toInstant()),
         Date.from(LocalDateTime.of(2025,12,31,0,0,0).atZone(ZoneId.systemDefault()).toInstant()),
-        new X500Name("C=IN, ST=Karnataka, L=Bangalore, O=Sahajsoftwaresolutions, OU=services, CN=sahajsoftwaresolutions/emailAddress=charana@sahajsoft.com"), intermedCAKeyPair.getPublic());
+        new X500Name("C=IN, ST=Andhra, L=Vijayawada, O=InteamoInnovations, OU=services, CN=InteamoInnovations/emailAddress=admin@inteamo.in"), intermedCAKeyPair.getPublic());
     builder.addExtension(Extension.keyUsage, true, new KeyUsage(KeyUsage.keyCertSign));
     builder.addExtension(Extension.basicConstraints, false, new BasicConstraints(true));
     X509Certificate intermedCA = new JcaX509CertificateConverter().getCertificate(builder
@@ -74,7 +74,7 @@ public class CertGenerator {
         intermedCA, //here intermedCA is issuer authority
         BigInteger.valueOf(new Random().nextInt()), Date.from(LocalDateTime.now().atZone(ZoneId.systemDefault()).toInstant()),
         Date.from(LocalDateTime.of(2025,12,31,0,0,0).atZone(ZoneId.systemDefault()).toInstant()),
-        new X500Name("C=IN, ST=Karnataka, L=Bangalore, O=Sahajsoftwaresolutions, OU=services, CN=sahajsoftwaresolutions/emailAddress=charana@sahajsoft.com"), endUserCertKeyPair.getPublic());
+        new X500Name("C=IN, ST=Andhra, L=Vijayawada, O=InteamoInnovations, OU=services, CN=InteamoInnovations/emailAddress=admin@inteamo.in"), endUserCertKeyPair.getPublic());
     builder.addExtension(Extension.keyUsage, true, new KeyUsage(KeyUsage.digitalSignature));
     builder.addExtension(Extension.basicConstraints, false, new BasicConstraints(false));
     X509Certificate endUserCert = new JcaX509CertificateConverter().getCertificate(builder
@@ -84,7 +84,7 @@ public class CertGenerator {
     storeToPKCS12("endUserCA.pkcs12",password,endUserCertKeyPair,endUserCert);
 
 
-    String messageString = "{\"version\":\"1.0\",\"txn\":\"test\",\"deviceId\":\"55556\",\"deviceModelId\":\"10\",\"operatorBusinessIdentifier\":\"5fdbbd3e439a4457b5ae59068120f613\",\"idHash\":null}";
+    String messageString = "{\"version\":\"1.0\",\"txn\":\"test\",\"deviceId\":\"55556\",\"deviceModelId\":\"10\",\"manufacturerBusinessIdentifier\":\"867e2311918543bcbe0f8d2f3cee4da8\",\"idHash\":null}";
     KeyPair retrievedKeyPair = loadFromPKCS12("interCA.pkcs12", password);
     RSAPublicKey pubKey = (RSAPublicKey) retrievedKeyPair.getPublic();
     RSAPrivateKey privKey = (RSAPrivateKey) retrievedKeyPair.getPrivate();
@@ -119,7 +119,7 @@ public class CertGenerator {
         new X509Certificate[] { selfSignedCertificate });
     KeyStore.ProtectionParameter param = new KeyStore.PasswordProtection(password);
 
-    pkcs12KeyStore.setEntry("sahajsoftwaresolutions", entry, param);
+    pkcs12KeyStore.setEntry("InteamoInnovations", entry, param);
 
     try (FileOutputStream fos = new FileOutputStream(filename)) {
       pkcs12KeyStore.store(fos, password);
@@ -136,7 +136,7 @@ public class CertGenerator {
     }
 
     KeyStore.ProtectionParameter param = new KeyStore.PasswordProtection(password);
-    KeyStore.Entry entry = pkcs12KeyStore.getEntry("sahajsoftwaresolutions",param);
+    KeyStore.Entry entry = pkcs12KeyStore.getEntry("InteamoInnovations",param);
     if (!(entry instanceof KeyStore.PrivateKeyEntry)) {
       throw new KeyStoreException("That's not a private key!");
     }

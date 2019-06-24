@@ -2,7 +2,7 @@ spring:
     application:
         name: digitalsky
     datasource:
-        url: jdbc:mysql://${DB_HOST:localhost}:${DB_PORT:3306}/digitalsky?useSSL=false
+        url: jdbc:mysql://${DB_HOST:localhost}:${DB_PORT:3306}/digitalsky?useSSL=false&allowPublicKeyRetrieval=true
         username: digitalsky
         password: digitalsky
         driverClassName: com.mysql.jdbc.Driver
@@ -33,10 +33,14 @@ spring:
         database: digitalsky
 flyway:
   enabled: true
-  url: jdbc:mysql://${DB_HOST:localhost}:${DB_PORT:3306}/digitalsky?useSSL=false
+  url: jdbc:mysql://${DB_HOST:localhost}:${DB_PORT:3306}/digitalsky?useSSL=false&allowPublicKeyRetrieval=true
   user: digitalsky
   password: digitalsky
   locations: classpath:/db/migration
 
 server:
   port: 9000
+
+  defaultFromEmailId: vijayvardhan.a@inteamo.in
+  sendGridApiKey: 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
+  reCaptchaSiteSecret: 6LdV0agUAAAAALzQFYMMyrDmvRm_h9gMt17ERth9

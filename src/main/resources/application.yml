@@ -17,15 +17,18 @@ spring:
               mode: none
         hibernate:
           dialect: org.hibernate.dialect.MySQL5InnoDBDialect
+          show_sql: true
+          format_sql: true
+          type: trace
     http:
       multipart:
         max-file-size: 10MB
         max-request-size: 10MB
 
     logging:
-        file: logs/dev_app.log
+        file: data/logs/digitalsky-api.log
         level:
-            org: DEBUG
+            org: INFO
     data:
       mongodb:
         host: ${MONGO_DB_HOST:localhost}

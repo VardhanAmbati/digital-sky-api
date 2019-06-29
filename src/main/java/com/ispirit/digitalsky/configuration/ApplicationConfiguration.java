@@ -29,6 +29,8 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.validation.Validator;
 import org.springframework.web.client.RestTemplate;
+import org.springframework.web.filter.CommonsRequestLoggingFilter;
+import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 
 import java.io.IOException;
 import java.io.BufferedReader;
@@ -97,6 +99,16 @@ public class ApplicationConfiguration {
     private boolean manufacturerDigitalCertValidationEnabled;
 
     private List<FlightInformationRegion> firs = new ArrayList<>();
+
+//    @Bean
+//    public CommonsRequestLoggingFilter requestLoggingFilter() {
+//        CommonsRequestLoggingFilter loggingFilter = new CommonsRequestLoggingFilter();
+//        loggingFilter.setIncludeClientInfo(true);
+//        loggingFilter.setIncludeQueryString(true);
+//        loggingFilter.setIncludePayload(true);
+//        loggingFilter.setIncludeHeaders(false);
+//        return loggingFilter;
+//    }
 
     @Bean
     public PasswordEncoder passwordEncoder() {

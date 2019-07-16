@@ -79,7 +79,36 @@ public class AirspaceCategoryServiceImpl implements AirspaceCategoryService {
             result.add(category);
         }
 
-        result.sort((o1, o2) -> o2.getModifiedDate().compareTo(o1.getModifiedDate()));
+        result.sort((o1, o2) -> o2.getModifiedDate().compareTo(o1.getModifiedDate()));//todo: this cannot be null
+        return result;
+    }
+
+    @Override
+    public List<AirspaceCategory> findAllAboveHeight(long height) {
+        Iterable<AirspaceCategory> categories = airspaceCategoryRepository.findWithHeight(height);
+        List<AirspaceCategory> result = new ArrayList<>();
+        for (AirspaceCategory category : categories) {
+            category.setGeoJsonFromString();
+            result.add(category);
+        }
+
+        return result;
+    }
+
+    @Override
+    public List<AirspaceCategory> findAllAboveHeightTime(long height, LocalDateTime startTime, LocalDateTime endTime){
+        Iterable<AirspaceCategory> timeCategories = airspaceCategoryRepository.findWithHeightAndTime(height,startTime,endTime);
+        Iterable<AirspaceCategory> categories = airspaceCategoryRepository.findWithHeight(height);
+        List<AirspaceCategory> result = new ArrayList<>();
+        for (AirspaceCategory category : categories) {
+            category.setGeoJsonFromString();
+            result.add(category);
+        }
+        for(AirspaceCategory category: timeCategories){
+            category.setGeoJsonFromString();
+            result.add(category);
+        }
+
         return result;
     }
 

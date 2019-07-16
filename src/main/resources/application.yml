@@ -2,7 +2,7 @@ spring:
     application:
         name: digitalsky
     datasource:
-        url: jdbc:mysql://${DB_HOST:localhost}:${DB_PORT:3306}/digitalsky?useSSL=false&allowPublicKeyRetrieval=true
+        url: jdbc:mysql://${DB_HOST:localhost}:${DB_PORT:3306}/digitalsky?useSSL=false
         username: digitalsky
         password: digitalsky
         driverClassName: com.mysql.jdbc.Driver
@@ -17,18 +17,15 @@ spring:
               mode: none
         hibernate:
           dialect: org.hibernate.dialect.MySQL5InnoDBDialect
-          show_sql: true
-          format_sql: true
-          type: trace
     http:
       multipart:
         max-file-size: 10MB
         max-request-size: 10MB
 
     logging:
-        file: data/logs/digitalsky-api.log
+        file: logs/dev_app.log
         level:
-            org: INFO
+            org: DEBUG
     data:
       mongodb:
         host: ${MONGO_DB_HOST:localhost}
@@ -36,7 +33,7 @@ spring:
         database: digitalsky
 flyway:
   enabled: true
-  url: jdbc:mysql://${DB_HOST:localhost}:${DB_PORT:3306}/digitalsky?useSSL=false&allowPublicKeyRetrieval=true
+  url: jdbc:mysql://${DB_HOST:localhost}:${DB_PORT:3306}/digitalsky?useSSL=false
   user: digitalsky
   password: digitalsky
   locations: classpath:/db/migration
@@ -44,6 +41,4 @@ flyway:
 server:
   port: 9000
 
-  defaultFromEmailId: vijayvardhan.a@inteamo.in
-  sendGridApiKey: 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
-  reCaptchaSiteSecret: 6LdV0agUAAAAALzQFYMMyrDmvRm_h9gMt17ERth9
+self-signed-validity: true

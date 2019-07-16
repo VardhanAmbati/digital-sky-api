@@ -44,6 +44,7 @@ public class ApplicationConfiguration {
 
     public static final String OBJECT_MAPPER = "object.mapper";
     public static final String FLY_DRONE_SERVICE = "fly.drone.service";
+    public static final String DRONE_TYPE_SERVICE = "drone.type.service";
 
     @Value("${DEFAULT_FROM_EMAIL_ID:no-reply@dgca.gov.in}")
     private String defaultFromEmailId;
@@ -95,6 +96,12 @@ public class ApplicationConfiguration {
 
     @Value("${MANUFACTURER_DIGITAL_CERT_VALIDATION_ENABLED:true}")
     private boolean manufacturerDigitalCertValidationEnabled;
+
+    @Value("${self-signed-validity:false}")
+    private String selfSignedValidity;
+
+    @Value("${CCA_CERT_PATH:classpath:CCAcertificate.pem}")
+    private String ccaCertificatePath;
 
     private List<FlightInformationRegion> firs = new ArrayList<>();
 
@@ -235,18 +242,20 @@ public class ApplicationConfiguration {
         return new UINApplicationServiceImpl(uinApplicationRepository, storageService, operatorDroneService, userProfileService, droneDeviceRepository);
     }
 
-    @Bean
+    @Bean(DRONE_TYPE_SERVICE)
     DroneTypeService droneTypeService(DroneTypeRepository droneTypeRepository, StorageService storageService) {
         return new DroneTypeServiceImpl(droneTypeRepository, storageService);
     }
 
     @Bean
+    @DependsOn(DRONE_TYPE_SERVICE)
     DroneDeviceService droneDeviceService(DroneDeviceRepository droneRepository, DigitalSignatureVerifierService signatureVerifierService,
                                           IndividualOperatorRepository individualOperatorRepository,
                                           OrganizationOperatorRepository organizationOperatorRepository,
                                           OperatorDroneService operatorDroneService,
-                                          ManufacturerService manufacturerService) {
-        return new DroneDeviceServiceImpl(droneRepository, signatureVerifierService,individualOperatorRepository, organizationOperatorRepository, operatorDroneService, manufacturerService );
+                                          ManufacturerService manufacturerService,
+                                          DroneTypeServiceImpl droneTypeService) {
+        return new DroneDeviceServiceImpl(droneRepository, signatureVerifierService,individualOperatorRepository, organizationOperatorRepository, operatorDroneService, manufacturerService, droneTypeService );
     }
 
     @Bean
@@ -257,7 +266,7 @@ public class ApplicationConfiguration {
 
     @Bean
     DigitalCertificateValidatorService digitalCertificateValidatorService() {
-        return new DigitalCertificateValidatorServiceImpl();
+        return new DigitalCertificateValidatorServiceImpl(Boolean.valueOf(selfSignedValidity),ccaCertificatePath);
     }
 
     @Bean
@@ -298,6 +307,11 @@ public class ApplicationConfiguration {
     @Bean
     DigitalSignService digitalSignService(ResourceLoader resourceLoader){
         return new DigitalSignServiceImpl(resourceLoader, digitalSkyPrivateKeyPath, digitalSkyCertificatePath);
+    }
+
+    @Bean
+    FlightLogServiceImpl flightLogService(FlightLogRepository flightLogRepository, StorageService storageService){
+        return new FlightLogServiceImpl(flightLogRepository,storageService);
     }
 
     @Bean

@@ -10,8 +10,6 @@ import java.security.cert.X509Certificate;
 
 import static junit.framework.TestCase.assertTrue;
 import static junit.framework.TestCase.fail;
-import static org.hamcrest.Matchers.is;
-import static org.mockito.Mockito.mock;
 
 public class DigitalCertificateValidatorServiceImplTest {
 
@@ -21,14 +19,14 @@ public class DigitalCertificateValidatorServiceImplTest {
 
     @Before
     public void setUp() {
-        digitalCertificateValidatorService = new DigitalCertificateValidatorServiceImpl();
+        digitalCertificateValidatorService = new DigitalCertificateValidatorServiceImpl(true,"/src/test/resources/CCAcertificate.pem");
     }
 
     @Test
     public void shouldSuccessfullyValidateDigitalCertificate() throws Exception {
         clientCertificate = DigitalSignatureVerifierForTest.generateX509CertificateFromBase64EncodedString(DigitalSignatureVerifierForTest.getValidCertificateString());
         File resourcesDirectory = new File("");
-        manufacturerCertificateChainPath = resourcesDirectory.getAbsolutePath() + "/final.pem";
+        manufacturerCertificateChainPath = resourcesDirectory.getAbsolutePath() + "/src/test/resources/trustedCertificateChain.pem";
 
         boolean isValid = digitalCertificateValidatorService.isValidCertificate(clientCertificate, manufacturerCertificateChainPath);
 
